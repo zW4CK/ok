@@ -1,1 +1,24 @@
-nigger
+local ClientHWID = game:GetService("RbxAnalyticsService"):GetClientId()
+function encode(hwid)
+    local PossibleChars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890"
+    local EncodedHwid = ""
+    
+    for i = 1, #hwid do
+        if string.find(PossibleChars, hwid:sub(i,i)) ~= nil or hwid:sub(i,i) == "-" then
+            local Index = tonumber(tostring(string.find(PossibleChars, hwid:sub(i,i))):sub(1,2))
+            
+            if Index ~= #PossibleChars then
+                if hwid:sub(i,i) == "-" then
+                    EncodedHwid = EncodedHwid.."-"
+                else
+                    EncodedHwid = EncodedHwid..PossibleChars:sub(Index + 1, Index + 1)
+                end
+            else
+                EncodedHwid = EncodedHwid..PossibleChars:sub(1,1)
+            end
+        end
+    end
+    return EncodedHwid
+end
+
+return setclipboard(encode(ClientHWID))
